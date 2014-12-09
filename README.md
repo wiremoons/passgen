@@ -66,6 +66,33 @@ The command line options are explained in more detail below:
 - **-w** : 'w' stands for 'word'. By default the suggested passwords consist of three x three letter words, so 9 characters in length. If you wanted a longer password length, you can chnage the number of words&mdash;so using `-w 4` would provide four words instead, giving a password length of 12 characters.
 - **-q** : 'q' stands for 'quiet'. This options only outputs ONE password (optionally at the length specified with -w) and no other text, so useful for using with command line pipes.
 
+### Downloading the Application
+
+Pre-compiled binaries are available from the Release page below. These are provide for Windows (32bit and 64bit), MacOSX (64bit), and Linux (64bit):
+
+- [passgen Release 0.3](https://github.com/wiremoons/passgen/releases/tag/0.3)
+
+
+### Compiling the Program
+
+Assuming you already have Go installed and set-up on your computer—you
+only need to download the single source file '`passgen.go`'. This can
+then be built using the command below, assuming the `passgen.go` file
+is in you current directory: 
+
+``` 
+go build ./passgen.go 
+``` 
+
+There is also a `Makefile` that I use on a computer running Linux to
+cross compile the program for Linux (64 bit version), Windows (32 bit
+and 64 bit versions) and Mac OS X (64 bit version). This can be done
+(assuming you have your computer and Go set-up correctly) by also
+downloading the 'Makefile', and then entering:
+```
+make all
+```
+
 ## To Do
 
 The following enhancements are planned - see the source code also for any other *TODO* suggestions:
@@ -78,7 +105,7 @@ The following enhancements are planned - see the source code also for any other 
 
 The program is licensed under the "New BSD License" or "BSD 3-Clause
 License". A copy of the license is available
-[here](https://github.com/wiremoons/passgen/blob/master/License.txt).
+[here](https://github.com/wiremoons/passgen/blob/master/LICENSE).
 
 ## OTHER INFORMATION
 
