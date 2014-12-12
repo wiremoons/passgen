@@ -8,10 +8,11 @@
 
 	Created: 20 Nov 2014 - initial program written
         Updated: 09 Dec 2014 - added quiet mode output added, and published to GitHub
+        Updated: 12 Dec 2014 - added space removal option -r, fixed leading space GitHub Issue #1 
+                                 and -v option for version output
 
        TODO - maybe check for newer version and update if needed?
        TODO - add -c mixed case output mode
-       TODO - add option to remove spaces between three letter words in output
 	
 */
 
@@ -24,13 +25,14 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"strings"
 )
 
 // GLOBAL VARIABLES
 //
 // set the version of the app here
 
-var appversion string = "0.3"
+var appversion string = "0.4"
 
 // below used by flag for command line args
 var numwords int
@@ -38,6 +40,8 @@ var numsuggestions int
 var passcase bool
 var helpMe bool
 var quiet bool
+var remove bool
+var version bool
 
 // var passmap holds a map of strings each containing a three letter word, each with a numeric key
 // if new words are required - just add them to the end of the list
@@ -104,11 +108,14 @@ var passmap = map[int]string{1: "axe", 2: "azo", 3: "baa", 4: "bad", 5: "bag", 6
 //
 func init() {
 	// IntVar; StringVar; BoolVar all required: variable, cmd line flag, initial value, description used by flag.Usage() on error / help
-	flag.IntVar(&numwords, "w", 3, "\tUSE: '-w no.' where no. is the number of three letter words to use [DEFAULT: 3]")
-	flag.IntVar(&numsuggestions, "s", 3, "\tUSE: '-s no.' where no. is the number of password suggestions offered [DEFAULT: 3]")
+
 	flag.BoolVar(&passcase, "c", false, "\tUSE: '-c=true' to get mixed case passwords [DEFAULT: lowercase]")
 	flag.BoolVar(&helpMe, "h", false, "\tUSE: '-h' to provide more detailed help about this program")
-	flag.BoolVar(&quiet, "q", false, "\tUSE: '-q=true' to obtain just ONE password - no other screen output [DEFAULT: additonal info output]")
+	flag.BoolVar(&quiet, "q", false, "\tUSE: '-q=true' to obtain just ONE password - no other screen output [DEFAULT: additional info output]")
+	flag.BoolVar(&remove, "r", false, "\tUSE: '-r=true' to remove spaces in suggested passwords [DEFAULT: with spaces]")
+	flag.IntVar(&numsuggestions, "s", 3, "\tUSE: '-s no.' where no. is the number of password suggestions offered [DEFAULT: 3]")
+	flag.BoolVar(&version, "v", false, "\tUSE: '-v=true.' display the application version [DEFAULT: false]")
+	flag.IntVar(&numwords, "w", 3, "\tUSE: '-w no.' where no. is the number of three letter words to use [DEFAULT: 3]")
 }
 
 // PROGRAM MAIN
@@ -130,6 +137,16 @@ func main() {
 		// exit the application
 		os.Exit(-3)
 	}
+
+	// check if the user just wanted to know the version using the command line flag '-v'
+	if version {
+		// print app name called and version information
+		fmt.Printf("%s version %s\n",os.Args[0], appversion)
+		// exit the application
+		os.Exit(-4)
+	}
+
+
 
 	// check how many three letter words the user wants to include in there password?
 	// if given a zero or negative value - reset to '3' the default
@@ -177,8 +194,14 @@ func getPassword(numwords int) string {
 	// get three letter word associated with random number:
 	for ; numwords > 0; numwords-- {
 		passSuggestion = passSuggestion + " " + (passmap[rand.Intn(len(passmap))])
-	}
 
+	}
+	// remove leading space from password string
+	passSuggestion = strings.TrimLeft(passSuggestion, " ")
+	// if remove spaces is true on command line with -r
+	if remove {
+		passSuggestion = strings.Replace(passSuggestion, " ", "", -1)
+	}
 	return passSuggestion
 }
 

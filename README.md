@@ -44,33 +44,42 @@ command line arguments, it displays the following output:
 • Mixed case passwords to be provided: false
 • Offering 3 suggested passwords for your consideration:
 
-	 din wry ran
-	 ova ram lit
-	 ski yea koa
+	din wry ran
+	ova ram lit
+	ski yea koa
 
 All is well
 ```
-The command line argument available are shown as below, when you run: `passgen --help`: 
+If you need to generate a 12 character password randomly created from three letter words&mdash;perhaps as part of a command line pipe, you could use this following options:
+```
+./passgen-linx64 -q -r -w 4
+coobarmenspy
+```
+The full list of command line arguments available are shown below, and also when you run: `passgen -help`: 
 ```
 Usage of ./passgen:
-  -c=false:     USE: '-c=true' to get mixed case passwords [DEFAULT: lowercase]
-  -h=false:     USE: '-h' to provide more detailed help about this program
-  -s=3:         USE: '-s no.' where no. is the number of password suggestions offered [DEFAULT: 3]
-  -w=3:         USE: '-w no.' where no. is the number of three letter words to use [DEFAULT: 3]
-  -q=false:     USE: '-q=true' to obtain just ONE password - no other screen output [DEFAULT: additonal info output]
+  -c=false: 	USE: '-c=true' to get mixed case passwords [DEFAULT: lowercase]
+  -h=false: 	USE: '-h' to provide more detailed help and background to this programs purpose
+  -q=false: 	USE: '-q=true' to obtain just ONE password - no other screen output [DEFAULT: additional info output]
+  -r=false: 	USE: '-r=true' to remove spaces in suggested passwords [DEFAULT: with spaces]
+  -s=3: 		USE: '-s no.' where no. is the number of password suggestions offered [DEFAULT: 3]
+  -v=false: 	USE: '-v=true.' display the application version [DEFAULT: false]
+  -w=3: 		USE: '-w no.' where no. is the number of three letter words to use [DEFAULT: 3]
 ```
 The command line options are explained in more detail below:
 - **-c** : 'c' stands for 'case'. by default the suggested passwords are shown in lowercase only. Run with `-c=true` to get mixed case suggestions
 - **-h** : 'h' stands for 'help'. if run with the `-h` option a screen of help text will be displayed
 - **-s** : 's' stands for 'suggestion'. By default three passwords will be suggested. Change by adding a different number, so `-s 5` would provide five passwords. 
 - **-w** : 'w' stands for 'word'. By default the suggested passwords consist of three x three letter words, so 9 characters in length. If you wanted a longer password length, you can chnage the number of words&mdash;so using `-w 4` would provide four words instead, giving a password length of 12 characters.
-- **-q** : 'q' stands for 'quiet'. This options only outputs ONE password (optionally at the length specified with -w) and no other text, so useful for using with command line pipes.
+- **-q** : 'q' stands for 'quiet'. This option only outputs ONE password (optionally at the length specified with -w) and no other text, so useful for using with command line pipes. Use with option `-r` to also remove spaces in the password
+- **-r** : 'v' stands for 'remove'. This options removes any spaces from the password suggestions that are output
+- **-v** : 'v' stands for 'version'. This options only outputs the version of the application
 
 ### Downloading the Application
 
 Pre-compiled binaries are available from the Release page below. These are provide for Windows (32bit and 64bit), MacOSX (64bit), and Linux (64bit):
 
-- [passgen Release 0.3](https://github.com/wiremoons/passgen/releases/tag/0.3)
+- [passgen Release 0.4](https://github.com/wiremoons/passgen/releases/tag/0.4)
 
 
 ### Compiling the Program
@@ -99,7 +108,6 @@ The following enhancements are planned - see the source code also for any other 
 
 - TODO - maybe check for newer version and update if needed?
 - TODO - add -c mixed case output mode
-- TODO - add option to remove spaces between three letter words in output
 
 ## License
 
