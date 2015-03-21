@@ -8,12 +8,15 @@
 
 	Created: 20 Nov 2014 - initial program written
         Updated: 09 Dec 2014 - added quiet mode output added, and published to GitHub
-        Updated: 12 Dec 2014 - added space removal option -r, fixed leading space GitHub Issue #1 
+        Updated: 12 Dec 2014 - added space removal option -r, fixed leading space GitHub Issue #1
                                  and -v option for version output
+        Updated: 21 Mar 2015 -  increased the three letter word pool from 573 words to 1,312 words.
+        						and fixed the errors identified by the 'Go Report Card' here:
+        						http://goreportcard.com/report/wiremoons/passgen
 
        TODO - maybe check for newer version and update if needed?
        TODO - add -c mixed case output mode
-	
+
 */
 
 package main
@@ -24,15 +27,14 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 )
 
 // GLOBAL VARIABLES
 //
 // set the version of the app here
-
-var appversion string = "0.4"
+var appversion = "0.5"
 
 // below used by flag for command line args
 var numwords int
@@ -45,64 +47,140 @@ var version bool
 
 // var passmap holds a map of strings each containing a three letter word, each with a numeric key
 // if new words are required - just add them to the end of the list
-var passmap = map[int]string{1: "axe", 2: "azo", 3: "baa", 4: "bad", 5: "bag", 6: "bah", 7: "bam", 8: "ban", 9: "bar",
-	10: "bat", 11: "bay", 12: "bed", 13: "bee", 14: "beg", 15: "bet", 16: "bey", 17: "bib", 18: "bid", 19: "big",
-	20: "bin", 21: "bio", 22: "bit", 23: "boa", 24: "bob", 25: "bod", 26: "bog", 27: "boo", 28: "bop", 29: "bot",
-	30: "bow", 31: "box", 32: "boy", 33: "bra", 34: "bro", 35: "bub", 36: "bud", 37: "bug", 38: "bum", 39: "bun",
-	40: "bus", 41: "but", 42: "buy", 43: "bye", 44: "cab", 45: "cad", 46: "cam", 47: "can", 48: "cap", 49: "car",
-	50: "cat", 51: "caw", 52: "cee", 53: "cha", 54: "chi", 55: "cob", 56: "cod", 57: "cog", 58: "con", 59: "coo",
-	60: "cop", 61: "cot", 62: "cow", 63: "cox", 64: "coy", 65: "cry", 66: "cub", 67: "cud", 68: "cue", 69: "cup",
-	70: "cur", 71: "cut", 72: "dab", 73: "dad", 74: "dag", 75: "dam", 76: "day", 77: "dee", 78: "den", 79: "dew",
-	80: "dib", 81: "did", 82: "die", 83: "dig", 84: "dim", 85: "din", 86: "dip", 87: "doe", 88: "dog", 89: "don",
-	90: "doo", 91: "dop", 92: "dot", 93: "dry", 94: "dub", 95: "dud", 96: "due", 97: "dug", 98: "duh", 99: "dun",
-	100: "duo", 101: "dux", 102: "dye", 103: "ear", 104: "eat", 105: "ebb", 106: "eel", 107: "egg", 108: "ego", 109: "eke",
-	110: "elf", 111: "elk", 112: "elm", 113: "emo", 114: "emu", 115: "end", 116: "eon", 117: "era", 118: "erg", 119: "err",
-	120: "eve", 121: "ewe", 122: "eye", 123: "fab", 124: "fad", 125: "fag", 126: "fan", 127: "far", 128: "far", 129: "fat",
-	130: "fax", 131: "fay", 132: "fed", 133: "fee", 134: "fen", 135: "few", 136: "fey", 137: "fez", 138: "fib", 139: "fie",
-	140: "fig", 141: "fin", 142: "fir", 143: "fit", 144: "fix", 145: "fly", 146: "fob", 147: "foe", 148: "fog", 149: "fon",
-	150: "fop", 151: "for", 152: "fox", 153: "fry", 154: "fun", 155: "fur", 156: "gab", 157: "gag", 158: "gak", 159: "gal",
-	160: "gap", 161: "gas", 162: "gaw", 163: "gay", 164: "gee", 165: "gel", 166: "gem", 167: "get", 168: "gig", 169: "gil",
-	170: "gin", 171: "git", 172: "gnu", 173: "gob", 174: "god", 175: "goo", 176: "got", 177: "gum", 178: "gun", 179: "gut",
-	180: "guy", 181: "gym", 182: "had", 183: "hag", 184: "hal", 185: "ham", 186: "has", 187: "hat", 188: "hay", 189: "hem",
-	190: "hen", 191: "her", 192: "hew", 193: "hex", 194: "hey", 195: "hid", 196: "him", 197: "hip", 198: "his", 199: "hit",
-	200: "hoe", 201: "hog", 202: "hop", 203: "hot", 204: "how", 205: "hoy", 206: "hub", 207: "hue", 208: "hug", 209: "hug",
-	210: "huh", 211: "hum", 212: "hut", 213: "ice", 214: "ick", 215: "icy", 216: "ilk", 217: "ill", 218: "imp", 219: "ink",
-	220: "inn", 221: "ion", 222: "ire", 223: "irk", 224: "ism", 225: "its", 226: "jab", 227: "jag", 228: "jah", 229: "jak",
-	230: "jam", 231: "jap", 232: "jar", 233: "jaw", 234: "jay", 235: "jem", 236: "jet", 237: "Jew", 238: "jib", 239: "jig",
-	240: "job", 241: "joe", 242: "jog", 243: "jon", 244: "jot", 245: "joy", 246: "jug", 247: "jus", 248: "jut", 249: "keg",
-	250: "key", 251: "kid", 252: "kin", 253: "kit", 254: "koa", 255: "kob", 256: "koi", 257: "lab", 258: "lad", 259: "lag",
-	260: "lap", 261: "law", 262: "lax", 263: "lay", 264: "lea", 265: "led", 266: "leg", 267: "lei", 268: "let", 269: "lew",
-	270: "lid", 271: "lie", 272: "lip", 273: "lit", 274: "lob", 275: "log", 276: "loo", 277: "lop", 278: "lot", 279: "low",
-	280: "lug", 281: "lux", 282: "lye", 283: "mac", 284: "mad", 285: "mag", 286: "man", 287: "map", 288: "mar", 289: "mat",
-	290: "maw", 291: "max", 292: "may", 293: "men", 294: "met", 295: "mic", 296: "mid", 297: "mit", 298: "mix", 299: "mob",
-	300: "mod", 301: "mog", 302: "mom", 303: "mon", 304: "moo", 305: "mop", 306: "mow", 307: "mud", 308: "mug", 309: "mum",
-	310: "nab", 311: "nag", 312: "nap", 313: "nee", 314: "neo", 315: "net", 316: "new", 317: "nib", 318: "nil", 319: "nip",
-	320: "nit", 321: "nix", 322: "nob", 323: "nod", 324: "nog", 325: "nor", 326: "not", 327: "now", 328: "nub", 329: "nun",
-	330: "nut", 331: "oaf", 332: "oak", 333: "oar", 334: "oat", 335: "odd", 336: "ode", 337: "off", 338: "oft", 339: "ohm",
-	340: "oil", 341: "old", 342: "ole", 343: "one", 344: "opt", 345: "orb", 346: "ore", 347: "our", 348: "out", 349: "out",
-	350: "ova", 351: "owe", 352: "owl", 353: "own", 354: "pac", 355: "pad", 356: "pal", 357: "pan", 358: "pap", 359: "par",
-	360: "pat", 361: "paw", 362: "pax", 363: "pay", 364: "pea", 365: "pee", 366: "peg", 367: "pen", 368: "pep", 369: "per",
-	370: "pet", 371: "pew", 372: "pic", 373: "pie", 374: "pig", 375: "pin", 376: "pip", 377: "pit", 378: "pix", 379: "ply",
-	380: "pod", 381: "pog", 382: "poi", 383: "poo", 384: "pop", 385: "pot", 386: "pow", 387: "pox", 388: "pro", 389: "pry",
-	390: "pub", 391: "pud", 392: "pug", 393: "pun", 394: "pup", 395: "pus", 396: "put", 397: "pyx", 398: "qat", 399: "qua",
-	400: "quo", 401: "rad", 402: "rag", 403: "ram", 404: "ran", 405: "rap", 406: "rat", 407: "raw", 408: "ray", 409: "red",
-	410: "rib", 411: "rid", 412: "rig", 413: "rim", 414: "rip", 415: "rob", 416: "roc", 417: "rod", 418: "roe", 419: "rot",
-	420: "row", 421: "rub", 422: "rue", 423: "rug", 424: "rum", 425: "run", 426: "rut", 427: "rye", 428: "sac", 429: "sad",
-	430: "sag", 431: "sap", 432: "sat", 433: "saw", 434: "sax", 435: "say", 436: "sea", 437: "sec", 438: "see", 439: "set",
-	440: "sew", 441: "sex", 442: "she", 443: "shy", 444: "sic", 445: "sim", 446: "sin", 447: "sip", 448: "sir", 449: "sis",
-	450: "sit", 451: "six", 452: "ski", 453: "sky", 454: "sly", 455: "sob", 456: "sod", 457: "som", 458: "son", 459: "sop",
-	460: "sot", 461: "sow", 462: "soy", 463: "spa", 464: "spy", 465: "sty", 466: "sub", 467: "sue", 468: "sum", 469: "sun",
-	470: "sun", 471: "sup", 472: "tab", 473: "tad", 474: "tag", 475: "tam", 476: "tan", 477: "tap", 478: "tar", 479: "tat",
-	480: "tax", 481: "tea", 482: "tee", 483: "ten", 484: "the", 485: "tic", 486: "tie", 487: "til", 488: "tin", 489: "tip",
-	490: "tit", 491: "toe", 492: "toe", 493: "tom", 494: "ton", 495: "too", 496: "top", 497: "tot", 498: "tow", 499: "toy",
-	500: "try", 501: "tub", 502: "tug", 503: "tui", 504: "tut", 505: "two", 506: "ugh", 507: "uke", 508: "ump", 509: "urn",
-	510: "use", 511: "van", 512: "vat", 513: "vee", 514: "vet", 515: "vex", 516: "via", 517: "vie", 518: "vig", 519: "vim",
-	520: "voe", 521: "vow", 522: "wad", 523: "wag", 524: "wan", 525: "war", 526: "was", 527: "wax", 528: "way", 529: "web",
-	530: "wed", 531: "wee", 532: "wen", 533: "wet", 534: "who", 535: "why", 536: "wig", 537: "win", 538: "wit", 539: "wiz",
-	540: "woe", 541: "wog", 542: "wok", 543: "won", 544: "woo", 545: "wow", 546: "wry", 547: "wye", 548: "yak", 549: "yam",
-	550: "yap", 551: "yaw", 552: "yay", 553: "yea", 554: "yen", 555: "yep", 556: "yes", 557: "yet", 558: "yew", 559: "yip",
-	560: "you", 561: "yow", 562: "yum", 563: "yup", 564: "zag", 565: "zap", 566: "zed", 567: "zee", 568: "zen", 569: "zig",
-	570: "zip", 571: "zit", 572: "zoa", 573: "zoo"}
+// Word list acquired from the Association of British Scrabble Players (ABSP), from the web page is here:
+// http://www.absp.org.uk/words/3lw.shtml
+var passmap = map[int]string{1: "aah", 2: "aal", 3: "aas", 4: "aba", 5: "abb", 6: "abo", 7: "abs", 8: "aby", 9: "ace",
+	10: "ach", 11: "act", 12: "add", 13: "ado", 14: "ads", 15: "adz", 16: "aff", 17: "aft", 18: "aga", 19: "age",
+	20: "ago", 21: "ags", 22: "aha", 23: "ahi", 24: "ahs", 25: "aia", 26: "aid", 27: "ail", 28: "aim", 29: "ain",
+	30: "air", 31: "ais", 32: "ait", 33: "aka", 34: "ake", 35: "ala", 36: "alb", 37: "ale", 38: "alf", 39: "all",
+	40: "alp", 41: "als", 42: "alt", 43: "alu", 44: "ama", 45: "ame", 46: "ami", 47: "amp", 48: "amu", 49: "ana",
+	50: "and", 51: "ane", 52: "ani", 53: "ann", 54: "ans", 55: "ant", 56: "any", 57: "ape", 58: "apo", 59: "app",
+	60: "apt", 61: "arb", 62: "arc", 63: "ard", 64: "are", 65: "arf", 66: "ark", 67: "arm", 68: "ars", 69: "art",
+	70: "ary", 71: "ash", 72: "ask", 73: "asp", 74: "ass", 75: "ate", 76: "ats", 77: "att", 78: "aua", 79: "aue",
+	80: "auf", 81: "auk", 82: "ava", 83: "ave", 84: "avo", 85: "awa", 86: "awe", 87: "awk", 88: "awl", 89: "awn",
+	90: "axe", 91: "aye", 92: "ays", 93: "ayu", 94: "azo", 95: "baa", 96: "bac", 97: "bad", 98: "bag", 99: "bah",
+	100: "bal", 101: "bam", 102: "ban", 103: "bap", 104: "bar", 105: "bas", 106: "bat", 107: "bay", 108: "bed", 109: "bee",
+	110: "beg", 111: "bel", 112: "ben", 113: "bes", 114: "bet", 115: "bey", 116: "bez", 117: "bib", 118: "bid", 119: "big",
+	120: "bin", 121: "bio", 122: "bis", 123: "bit", 124: "biz", 125: "boa", 126: "bob", 127: "bod", 128: "bog", 129: "boh",
+	130: "boi", 131: "bok", 132: "bon", 133: "boo", 134: "bop", 135: "bor", 136: "bos", 137: "bot", 138: "bow", 139: "box",
+	140: "boy", 141: "bra", 142: "bro", 143: "brr", 144: "bru", 145: "bub", 146: "bud", 147: "bug", 148: "bum", 149: "bun",
+	150: "bur", 151: "bus", 152: "but", 153: "buy", 154: "bye", 155: "bys", 156: "caa", 157: "cab", 158: "cad", 159: "cag",
+	160: "cam", 161: "can", 162: "cap", 163: "car", 164: "cat", 165: "caw", 166: "cay", 167: "caz", 168: "cee", 169: "cel",
+	170: "cep", 171: "cha", 172: "che", 173: "chi", 174: "cid", 175: "cig", 176: "cis", 177: "cit", 178: "cly", 179: "cob",
+	180: "cod", 181: "cog", 182: "col", 183: "con", 184: "coo", 185: "cop", 186: "cor", 187: "cos", 188: "cot", 189: "cow",
+	190: "cox", 191: "coy", 192: "coz", 193: "cru", 194: "cry", 195: "cub", 196: "cud", 197: "cue", 198: "cum", 199: "cup",
+	200: "cur", 201: "cut", 202: "cuz", 203: "cwm", 204: "dab", 205: "dad", 206: "dae", 207: "dag", 208: "dah", 209: "dak",
+	210: "dal", 211: "dam", 212: "dan", 213: "dap", 214: "das", 215: "daw", 216: "day", 217: "deb", 218: "dee", 219: "def",
+	220: "deg", 221: "dei", 222: "del", 223: "den", 224: "dev", 225: "dew", 226: "dex", 227: "dey", 228: "dib", 229: "did",
+	230: "die", 231: "dif", 232: "dig", 233: "dim", 234: "din", 235: "dip", 236: "dis", 237: "dit", 238: "div", 239: "dob",
+	240: "doc", 241: "dod", 242: "doe", 243: "dof", 244: "dog", 245: "doh", 246: "dol", 247: "dom", 248: "don", 249: "doo",
+	250: "dop", 251: "dor", 252: "dos", 253: "dot", 254: "dow", 255: "doy", 256: "dry", 257: "dso", 258: "dub", 259: "dud",
+	260: "due", 261: "dug", 262: "duh", 263: "dui", 264: "dun", 265: "duo", 266: "dup", 267: "dux", 268: "dye", 269: "dzo",
+	270: "ean", 271: "ear", 272: "eas", 273: "eat", 274: "eau", 275: "ebb", 276: "ech", 277: "eco", 278: "ecu", 279: "edh",
+	280: "eds", 281: "eek", 282: "eel", 283: "een", 284: "eff", 285: "efs", 286: "eft", 287: "egg", 288: "ego", 289: "ehs",
+	290: "eik", 291: "eke", 292: "eld", 293: "elf", 294: "elk", 295: "ell", 296: "elm", 297: "els", 298: "elt", 299: "eme",
+	300: "emo", 301: "ems", 302: "emu", 303: "end", 304: "ene", 305: "eng", 306: "ens", 307: "eon", 308: "era", 309: "ere",
+	310: "erf", 311: "erg", 312: "erk", 313: "erm", 314: "ern", 315: "err", 316: "ers", 317: "ess", 318: "est", 319: "eta",
+	320: "eth", 321: "euk", 322: "eve", 323: "evo", 324: "ewe", 325: "ewk", 326: "ewt", 327: "exo", 328: "eye", 329: "faa",
+	330: "fab", 331: "fad", 332: "fae", 333: "fag", 334: "fah", 335: "fan", 336: "fap", 337: "far", 338: "fas", 339: "fat",
+	340: "faw", 341: "fax", 342: "fay", 343: "fed", 344: "fee", 345: "feg", 346: "feh", 347: "fem", 348: "fen", 349: "fer",
+	350: "fes", 351: "fet", 352: "feu", 353: "few", 354: "fey", 355: "fez", 356: "fib", 357: "fid", 358: "fie", 359: "fig",
+	360: "fil", 361: "fin", 362: "fir", 363: "fit", 364: "fix", 365: "fiz", 366: "flu", 367: "fly", 368: "fob", 369: "foe",
+	370: "fog", 371: "foh", 372: "fon", 373: "fop", 374: "for", 375: "fou", 376: "fox", 377: "foy", 378: "fra", 379: "fro",
+	380: "fry", 381: "fub", 382: "fud", 383: "fug", 384: "fum", 385: "fun", 386: "fur", 387: "gab", 388: "gad", 389: "gae",
+	390: "gag", 391: "gak", 392: "gal", 393: "gam", 394: "gan", 395: "gap", 396: "gar", 397: "gas", 398: "gat", 399: "gau",
+	400: "gaw", 401: "gay", 402: "ged", 403: "gee", 404: "gel", 405: "gem", 406: "gen", 407: "geo", 408: "ger", 409: "get",
+	410: "gey", 411: "ghi", 412: "gib", 413: "gid", 414: "gie", 415: "gif", 416: "gig", 417: "gin", 418: "gio", 419: "gip",
+	420: "gis", 421: "git", 422: "gju", 423: "gnu", 424: "goa", 425: "gob", 426: "god", 427: "goe", 428: "gon", 429: "goo",
+	430: "gor", 431: "gos", 432: "got", 433: "gov", 434: "gox", 435: "goy", 436: "gub", 437: "gue", 438: "gul", 439: "gum",
+	440: "gun", 441: "gup", 442: "gur", 443: "gus", 444: "gut", 445: "guv", 446: "guy", 447: "gym", 448: "gyp", 449: "had",
+	450: "hae", 451: "hag", 452: "hah", 453: "haj", 454: "ham", 455: "han", 456: "hao", 457: "hap", 458: "has", 459: "hat",
+	460: "haw", 461: "hay", 462: "heh", 463: "hem", 464: "hen", 465: "hep", 466: "her", 467: "hes", 468: "het", 469: "hew",
+	470: "hex", 471: "hey", 472: "hic", 473: "hid", 474: "hie", 475: "him", 476: "hin", 477: "hip", 478: "his", 479: "hit",
+	480: "hmm", 481: "hoa", 482: "hob", 483: "hoc", 484: "hod", 485: "hoe", 486: "hog", 487: "hoh", 488: "hoi", 489: "hom",
+	490: "hon", 491: "hoo", 492: "hop", 493: "hos", 494: "hot", 495: "how", 496: "hox", 497: "hoy", 498: "hub", 499: "hue",
+	500: "hug", 501: "huh", 502: "hui", 503: "hum", 504: "hun", 505: "hup", 506: "hut", 507: "hye", 508: "hyp", 509: "ice",
+	510: "ich", 511: "ick", 512: "icy", 513: "ide", 514: "ids", 515: "iff", 516: "ifs", 517: "igg", 518: "ilk", 519: "ill",
+	520: "imp", 521: "ing", 522: "ink", 523: "inn", 524: "ins", 525: "ion", 526: "ios", 527: "ire", 528: "irk", 529: "ish",
+	530: "ism", 531: "iso", 532: "ita", 533: "its", 534: "ivy", 535: "iwi", 536: "jab", 537: "jag", 538: "jai", 539: "jak",
+	540: "jam", 541: "jap", 542: "jar", 543: "jaw", 544: "jay", 545: "jee", 546: "jet", 547: "jeu", 548: "jew", 549: "jib",
+	550: "jig", 551: "jin", 552: "jiz", 553: "job", 554: "joe", 555: "jog", 556: "jol", 557: "jor", 558: "jot", 559: "jow",
+	560: "joy", 561: "jud", 562: "jug", 563: "jun", 564: "jus", 565: "jut", 566: "kab", 567: "kae", 568: "kaf", 569: "kai",
+	570: "kak", 571: "kam", 572: "kas", 573: "kat", 574: "kaw", 575: "kay", 576: "kea", 577: "keb", 578: "ked", 579: "kef",
+	580: "keg", 581: "ken", 582: "kep", 583: "ket", 584: "kex", 585: "key", 586: "khi", 587: "kid", 588: "kif", 589: "kin",
+	590: "kip", 591: "kir", 592: "kis", 593: "kit", 594: "koa", 595: "kob", 596: "koi", 597: "kon", 598: "kop", 599: "kor",
+	600: "kos", 601: "kow", 602: "kue", 603: "kye", 604: "kyu", 605: "lab", 606: "lac", 607: "lad", 608: "lag", 609: "lah",
+	610: "lam", 611: "lap", 612: "lar", 613: "las", 614: "lat", 615: "lav", 616: "law", 617: "lax", 618: "lay", 619: "lea",
+	620: "led", 621: "lee", 622: "leg", 623: "lei", 624: "lek", 625: "lep", 626: "les", 627: "let", 628: "leu", 629: "lev",
+	630: "lew", 631: "lex", 632: "ley", 633: "lez", 634: "lib", 635: "lid", 636: "lie", 637: "lig", 638: "lin", 639: "lip",
+	640: "lis", 641: "lit", 642: "lob", 643: "lod", 644: "log", 645: "loo", 646: "lop", 647: "lor", 648: "los", 649: "lot",
+	650: "lou", 651: "low", 652: "lox", 653: "loy", 654: "lud", 655: "lug", 656: "lum", 657: "lur", 658: "luv", 659: "lux",
+	660: "luz", 661: "lye", 662: "lym", 663: "maa", 664: "mac", 665: "mad", 666: "mae", 667: "mag", 668: "mak", 669: "mal",
+	670: "mam", 671: "man", 672: "map", 673: "mar", 674: "mas", 675: "mat", 676: "maw", 677: "max", 678: "may", 679: "med",
+	680: "mee", 681: "meg", 682: "meh", 683: "mel", 684: "mem", 685: "men", 686: "mes", 687: "met", 688: "meu", 689: "mew",
+	690: "mho", 691: "mib", 692: "mic", 693: "mid", 694: "mig", 695: "mil", 696: "mim", 697: "mir", 698: "mis", 699: "mix",
+	700: "miz", 701: "mna", 702: "moa", 703: "mob", 704: "moc", 705: "mod", 706: "moe", 707: "mog", 708: "moi", 709: "mol",
+	710: "mom", 711: "mon", 712: "wit", 713: "moo", 714: "mop", 715: "mor", 716: "mos", 717: "mot", 718: "mou", 719: "mow",
+	720: "moy", 721: "moz", 722: "mud", 723: "mug", 724: "mum", 725: "mun", 726: "mus", 727: "mut", 728: "mux", 729: "myc",
+	730: "nab", 731: "nae", 732: "nag", 733: "nah", 734: "nam", 735: "nan", 736: "nap", 737: "nas", 738: "nat", 739: "naw",
+	740: "nay", 741: "neb", 742: "ned", 743: "nee", 744: "nef", 745: "neg", 746: "nek", 747: "nep", 748: "net", 749: "new",
+	750: "nib", 751: "nid", 752: "nie", 753: "nil", 754: "nim", 755: "nip", 756: "nis", 757: "nit", 758: "nix", 759: "nob",
+	760: "nod", 761: "nog", 762: "noh", 763: "nom", 764: "non", 765: "noo", 766: "nor", 767: "nos", 768: "not", 769: "now",
+	770: "nox", 771: "noy", 772: "nth", 773: "nub", 774: "nun", 775: "nur", 776: "nus", 777: "nut", 778: "nye", 779: "nys",
+	780: "oaf", 781: "oak", 782: "oar", 783: "oat", 784: "oba", 785: "obe", 786: "obi", 787: "obo", 788: "obs", 789: "oca",
+	790: "och", 791: "oda", 792: "odd", 793: "ode", 794: "ods", 795: "oes", 796: "off", 797: "oft", 798: "ohm", 799: "oho",
+	800: "ohs", 801: "oik", 802: "oil", 803: "ois", 804: "oka", 805: "oke", 806: "old", 807: "ole", 808: "olm", 809: "oms",
+	810: "one", 811: "ono", 812: "ons", 813: "ony", 814: "oof", 815: "ooh", 816: "oom", 817: "oon", 818: "oop", 819: "oor",
+	820: "oos", 821: "oot", 822: "ope", 823: "ops", 824: "opt", 825: "ora", 826: "orb", 827: "orc", 828: "ord", 829: "ore",
+	830: "orf", 831: "ors", 832: "ort", 833: "ose", 834: "oud", 835: "ouk", 836: "oup", 837: "our", 838: "ous", 839: "out",
+	840: "ova", 841: "owe", 842: "owl", 843: "own", 844: "owt", 845: "oxo", 846: "oxy", 847: "oye", 848: "oys", 849: "pac",
+	850: "pad", 851: "pah", 852: "pal", 853: "pam", 854: "pan", 855: "pap", 856: "par", 857: "pas", 858: "pat", 859: "pav",
+	860: "paw", 861: "pax", 862: "pay", 863: "pea", 864: "pec", 865: "ped", 866: "pee", 867: "peg", 868: "peh", 869: "pel",
+	870: "pen", 871: "pep", 872: "per", 873: "pes", 874: "pet", 875: "pew", 876: "phi", 877: "pho", 878: "pht", 879: "pia",
+	880: "pic", 881: "pie", 882: "pig", 883: "pin", 884: "pip", 885: "pir", 886: "pis", 887: "pit", 888: "piu", 889: "pix",
+	890: "plu", 891: "ply", 892: "poa", 893: "pod", 894: "poh", 895: "poi", 896: "pol", 897: "pom", 898: "poo", 899: "pop",
+	900: "pos", 901: "pot", 902: "pow", 903: "pox", 904: "poz", 905: "pre", 906: "pro", 907: "pry", 908: "psi", 909: "pst",
+	910: "pub", 911: "pud", 912: "pug", 913: "puh", 914: "pul", 915: "pun", 916: "pup", 917: "pur", 918: "pus", 919: "put",
+	920: "puy", 921: "pya", 922: "pye", 923: "pyx", 924: "qat", 925: "qis", 926: "qua", 927: "qin", 928: "rad", 929: "rag",
+	930: "rah", 931: "rai", 932: "raj", 933: "ram", 934: "ran", 935: "rap", 936: "ras", 937: "rat", 938: "rav", 939: "raw",
+	940: "rax", 941: "ray", 942: "reb", 943: "rec", 944: "red", 945: "ree", 946: "ref", 947: "reg", 948: "reh", 949: "rei",
+	950: "rem", 951: "ren", 952: "reo", 953: "rep", 954: "res", 955: "ret", 956: "rev", 957: "rew", 958: "rex", 959: "rez",
+	960: "rho", 961: "rhy", 962: "ria", 963: "rib", 964: "rid", 965: "rif", 966: "rig", 967: "rim", 968: "rin", 969: "rip",
+	970: "rit", 971: "riz", 972: "rob", 973: "roc", 974: "rod", 975: "roe", 976: "rok", 977: "rom", 978: "roo", 979: "rot",
+	980: "row", 981: "rub", 982: "ruc", 983: "rud", 984: "rue", 985: "rug", 986: "rum", 987: "run", 988: "rut", 989: "rya",
+	990: "rye", 991: "sab", 992: "sac", 993: "sad", 994: "sae", 995: "sag", 996: "sai", 997: "sal", 998: "sam", 999: "san",
+	1000: "sap", 1001: "sar", 1002: "sat", 1003: "sau", 1004: "sav", 1005: "saw", 1006: "sax", 1007: "say", 1008: "SAY", 1009: "saz",
+	1010: "sea", 1011: "sec", 1012: "sed", 1013: "see", 1014: "seg", 1015: "sei", 1016: "sel", 1017: "sen", 1018: "ser", 1019: "set",
+	1020: "sew", 1021: "sex", 1022: "sey", 1023: "sez", 1024: "sha", 1025: "she", 1026: "shh", 1027: "shy", 1028: "sib", 1029: "sic",
+	1030: "sif", 1031: "sik", 1032: "sim", 1033: "sin", 1034: "sip", 1035: "sir", 1036: "sis", 1037: "sit", 1038: "six", 1039: "ska",
+	1040: "ski", 1041: "sky", 1042: "sly", 1043: "sma", 1044: "sny", 1045: "sob", 1046: "soc", 1047: "sod", 1048: "sog", 1049: "soh",
+	1050: "sol", 1051: "som", 1052: "son", 1053: "sop", 1054: "sos", 1055: "sot", 1056: "sou", 1057: "sov", 1058: "sow", 1059: "sox",
+	1060: "soy", 1061: "soz", 1062: "spa", 1063: "spy", 1064: "sri", 1065: "sty", 1066: "sub", 1067: "sud", 1068: "sue", 1069: "sug",
+	1070: "sui", 1071: "suk", 1072: "sum", 1073: "sun", 1074: "sup", 1075: "suq", 1076: "sur", 1077: "sus", 1078: "swy", 1079: "sye",
+	1080: "syn", 1081: "tab", 1082: "tad", 1083: "tae", 1084: "tag", 1085: "tai", 1086: "taj", 1087: "tak", 1088: "tam", 1089: "tan",
+	1090: "tao", 1091: "tap", 1092: "tar", 1093: "tas", 1094: "tat", 1095: "tau", 1096: "tav", 1097: "taw", 1098: "tax", 1099: "tay",
+	1100: "tea", 1101: "tec", 1102: "ted", 1103: "tee", 1104: "tef", 1105: "teg", 1106: "tel", 1107: "ten", 1108: "tes", 1109: "tet",
+	1110: "tew", 1111: "tex", 1112: "the", 1113: "tho", 1114: "thy", 1115: "tic", 1116: "tid", 1117: "tie", 1118: "tig", 1119: "tik",
+	1120: "til", 1121: "tin", 1122: "tip", 1123: "tis", 1124: "tit", 1125: "tix", 1126: "toc", 1127: "tod", 1128: "toe", 1129: "tog",
+	1130: "tom", 1131: "ton", 1132: "too", 1133: "top", 1134: "tor", 1135: "tot", 1136: "tow", 1137: "toy", 1138: "try", 1139: "tsk",
+	1140: "tub", 1141: "tug", 1142: "tui", 1143: "tum", 1144: "tun", 1145: "tup", 1146: "tut", 1147: "tux", 1148: "twa", 1149: "two",
+	1150: "twp", 1151: "tye", 1152: "tyg", 1153: "udo", 1154: "uds", 1155: "uey", 1156: "ufo", 1157: "ugh", 1158: "ugs", 1159: "uke",
+	1160: "ule", 1161: "ulu", 1162: "umm", 1163: "ump", 1164: "ums", 1165: "umu", 1166: "uni", 1167: "uns", 1168: "upo", 1169: "ups",
+	1170: "urb", 1171: "urd", 1172: "ure", 1173: "urn", 1174: "urp", 1175: "use", 1176: "uta", 1177: "ute", 1178: "uts", 1179: "utu",
+	1180: "uva", 1181: "vac", 1182: "vae", 1183: "vag", 1184: "van", 1185: "var", 1186: "vas", 1187: "vat", 1188: "vau", 1189: "vav",
+	1190: "vaw", 1191: "vee", 1192: "veg", 1193: "vet", 1194: "vex", 1195: "via", 1196: "vid", 1197: "vie", 1198: "vig", 1199: "vim",
+	1200: "vin", 1201: "vis", 1202: "vly", 1203: "voe", 1204: "vol", 1205: "vor", 1206: "vow", 1207: "vox", 1208: "vug", 1209: "vum",
+	1210: "wab", 1211: "wad", 1212: "wae", 1213: "wag", 1214: "wai", 1215: "wan", 1216: "wap", 1217: "war", 1218: "was", 1219: "wat",
+	1220: "waw", 1221: "wax", 1222: "way", 1223: "web", 1224: "wed", 1225: "wee", 1226: "wem", 1227: "wen", 1228: "wet", 1229: "wex",
+	1230: "wey", 1231: "wha", 1232: "who", 1233: "why", 1234: "wig", 1235: "win", 1236: "wis", 1237: "wit", 1238: "wiz", 1239: "woe",
+	1240: "wof", 1241: "wog", 1242: "wok", 1243: "won", 1244: "woo", 1245: "wop", 1246: "wos", 1247: "wot", 1248: "wow", 1249: "wox",
+	1250: "wry", 1251: "wud", 1252: "wus", 1253: "wye", 1254: "wyn", 1255: "xis", 1256: "yad", 1257: "yae", 1258: "yag", 1259: "yah",
+	1260: "yak", 1261: "yam", 1262: "yap", 1263: "yar", 1264: "yaw", 1265: "yay", 1266: "yea", 1267: "yeh", 1268: "yen", 1269: "yep",
+	1270: "yes", 1271: "yet", 1272: "yew", 1273: "yex", 1274: "ygo", 1275: "yid", 1276: "yin", 1277: "yip", 1278: "yob", 1279: "yod",
+	1280: "yok", 1281: "yom", 1282: "yon", 1283: "you", 1284: "yow", 1285: "yug", 1286: "yuk", 1287: "yum", 1288: "yup", 1289: "yus",
+	1290: "zag", 1291: "zap", 1292: "zas", 1293: "zax", 1294: "zea", 1295: "zed", 1296: "zee", 1297: "zek", 1298: "zel", 1299: "zep",
+	1300: "zex", 1301: "zho", 1302: "zig", 1303: "zin", 1304: "zip", 1305: "zit", 1306: "ziz", 1307: "zoa", 1308: "zol", 1309: "zoo",
+	1310: "zos", 1311: "zuz", 1312: "zzz"}
 
 // init() function - always runs before main() - used here to set-up required command line flag variables
 //
@@ -133,7 +211,7 @@ func main() {
 		// call to display the standard command lines usage info
 		flag.Usage()
 		// let user know we ran as expected
-		fmt.Println("\n\nAll is well.\n")
+		fmt.Printf("\n\nAll is well.\n\n")
 		// exit the application
 		os.Exit(-3)
 	}
@@ -141,12 +219,10 @@ func main() {
 	// check if the user just wanted to know the version using the command line flag '-v'
 	if version {
 		// print app name called and version information
-		fmt.Printf("%s version %s\n",os.Args[0], appversion)
+		fmt.Printf("%s version %s\n", os.Args[0], appversion)
 		// exit the application
 		os.Exit(-4)
 	}
-
-
 
 	// check how many three letter words the user wants to include in there password?
 	// if given a zero or negative value - reset to '3' the default
@@ -169,7 +245,6 @@ func main() {
 		// done - so exit application
 		os.Exit(0)
 	}
-
 
 	// OK - so run as normal and display output
 	fmt.Printf("\n\t\t\tTHREE WORD - PASSWORD GENERATOR\n\t\t\t¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n")
@@ -214,7 +289,7 @@ func printHelp() {
 	About
 	¯¯¯¯¯
 	This application will generate password suggestions based on a pool of
-	several hundred three letter English words. The words are selected from 
+	over 1,000 three letter English words. The words are selected from 
 	the pool randomly, and then displayed to the screen so you can choose one
 	for use as a very secure password.
 
@@ -229,23 +304,23 @@ func printHelp() {
 	fresh newly generated one every few weeks.
 
 	Are These Passwords Secure?
-	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 	While the passwords generated look far too simple and easy to be secure, they 
 	are in fact very secure, and difficult to crack. Just because they look simple 
-	to a human - it doesn't mean they are simple to work out in a computer. They are 
-	in fact quite hard to work out for a computer, as they are random, not a single 
-	dictionary word, or a single common name, with perhaps number substitutions and 
-	other common 'complex' combinations - or some combination of these with things. 
+	to a human - it doesn't mean they are simple to work out using a computer. They
+	are in fact quite hard to work out for a computer. The reason for this is that 
+	they are randomly generated, not a single dictionary word, or a single common 
+	name. This makes the password harder to 'find' as it is not commonly known.
 	It is a common misconception that a password has to be 'complex' to be any good.
 
 	Unfortunately we have been led to believe that the more complex a password is - 
 	the better and more secure it will be - which is in fact wrong.
 
-	In fact a longer password, that can more easily be remember and therefore changed
+	In fact a longer password, that can more easily be remember, and therefore changed
 	more frequently as a consequence, actually offers a far greater degree of security.
 
 	For more information and explanations of this, please see the web pages 
-	included below under 'References'. There are plenty of other expert sources on 
+	included below under 'References'. There are plenty of expert sources on 
 	the Internet also, that will explain the benefits and security of using a randomly 
 	generated three word (or more) combination password. Just remember - your password
 	must be at least nine characters in total - or longer if possible. You can of course 
@@ -253,21 +328,18 @@ func printHelp() {
 
 	So How Many Possible Passwords Are There?
 	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-	There are over 500 three letter words in the pool that can be chosen from, and 
-	assuming you use a three of these words combined, that provide 500^3 (500 to power 
+	There are over 1,000 three letter words in the pool that can be chosen from, and 
+	assuming you use three of these words combined, that provide 1,000^3 (1,000 to power 
 	of 3) possible combinations - of which one is your password.  
 
-	So - 500 x 500 x 500 = 125,000,000 (one hundred and twenty five million) possibilities.
-
-	Maybe that doesn't sound like a lot - but if you could check 20 of them every second, 
-	24 hours a day, you would need roughly 60 days to get through them all!
+	So - 1,000 x 1,000 x 1,000 = 1,000,000,000 (one billion) possibilities.
 
 	If you use the mixed case option (upper and lower case) - then number increases further 
 	of course - and you can still add numbers, and/or punctuation characters if you wish too.
 
 	Or just increase you password length to 12 characters, so use four of the three letter 
-	words, and you end up with 62,500,000,000 (sixty two billion five hundred million) 
-	possibilities - and that just lower case letters only. 
+	words, and you end up with 1,000,000,000,000 (one thousand billion) possibilities - 
+	and that is just lower case letters only. 
 
 
 	References

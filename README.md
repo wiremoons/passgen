@@ -1,6 +1,6 @@
 [![NewBSD License](http://img.shields.io/badge/license-NewBSD-orange.svg?style=flat-square)](http://opensource.org/licenses/BSD-3-Clause)
 
-## THREE WORD - PASSWORD GENERATOR
+## THREE WORD - PASSWORD GENERATOR (Go version)
 
 ## Application Summary
 
@@ -25,8 +25,20 @@ punctuation characters too if you wish&mdash;but it would be wiser to
 keep the password simple, and easy to remember, but change it more
 frequently instead, using a fresh newly generated one every few weeks.
 
-For more information see the related blog post here:
-[2014-12-09-Three-Letter-Word-Passwords](http://www.wiremoons.com/posts/2014-12-09-Three-Letter-Word-Passwords)
+**Update 21 March 2015:** the larger pool of three letter words used in
+  the c language version (instead of Go) available here:
+  [sugpass](https://github.com/wiremoons/sugpass) has now been added to this
+  application also.
+
+**Update 22 Jan 2015:** there is a newer version of this program with
+  a larger pool of three letter words. The application is written in
+  the c language (instead of Go) and is available here:
+  [sugpass](https://github.com/wiremoons/sugpass)
+
+For more information see the related blog posts here:
+
+- [2014-12-09-Three-Letter-Word-Passwords](http://www.wiremoons.com/posts/2014-12-09-Three-Letter-Word-Passwords)
+- [2015-01-22-Easy-Passwords-Everywhere](http://www.wiremoons.com/posts/2015-01-22-Easy-Passwords-Everywhere)
 
 ### Application Usage
 
