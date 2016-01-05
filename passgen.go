@@ -17,6 +17,8 @@
 				Updated: 11 July 2015 - [v0.6] changed default output to show multiple suggestions
 										(ie with & without spaces & mixed case) plus as a
 										consequence made '-r' only relevant to '-q' option
+				Updated: 12 July 2015 - typo fixed in help text thanks to GitHub User @morgrowe
+				Updated: 13 July 2015 - updated -v option to show version and compiler used for build
 
        TODO - maybe check for newer version and update if needed?
        TODO - add -c mixed case output mode
@@ -31,6 +33,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -363,6 +366,7 @@ func main() {
 	if version {
 		// print app name called and version information
 		fmt.Printf("\n Running %s version %s\n", appname, appversion)
+		fmt.Printf(" Built with Go Complier '%s' on Golang version '%s'\n",runtime.Compiler, runtime.Version())
 		fmt.Printf(" - Author's web site: http://www.wiremoons.com/\n")
 		fmt.Printf(" - Source code for %s: https://github.com/wiremoons/passgen/\n", appname)
 		fmt.Printf("\nAll is well\n")
@@ -534,7 +538,7 @@ func printHelp() {
 	 - http://www.baekdal.com/insights/the-usability-of-passwords-faq
 	Steve Gibson - GRC 'How Big is Your Haystack?'
 	 - https://www.grc.com/haystack.htm
-	Application 'passgen' - authors web site
+	Application 'passgen' - author's web site
 	 - http://www.wiremoons.com/
 
 	`
