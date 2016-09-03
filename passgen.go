@@ -7,21 +7,24 @@
 	- optional upper and lower-case combinations can be offered with a command line switch.
 
 	Created: 20 Nov 2014 - initial program written
-        Updated: 09 Dec 2014 - added quiet mode output added, and published to GitHub
-        Updated: 12 Dec 2014 - added space removal option -r, fixed leading space GitHub Issue #1
+    Updated: 09 Dec 2014 - added quiet mode output added, and published to GitHub
+    Updated: 12 Dec 2014 - added space removal option -r, fixed leading space GitHub Issue #1
                                  and -v option for version output
-        Updated: 21 Mar 2015 -  [v0.5] increased the three letter word pool from
-										573 words to 1,312 words. and fixed the errors identified by
-										the 'Go Report Card' here: http://goreportcard.com/report/wiremoons/passgen
-        Updated: 20 June 2015 - typo fixes kindly reported by GitHub User @RickCogley.
-				Updated: 11 July 2015 - [v0.6] changed default output to show multiple suggestions
-										(ie with & without spaces & mixed case) plus as a
-										consequence made '-r' only relevant to '-q' option
-				Updated: 12 July 2015 - typo fixed in help text thanks to GitHub User @morgrowe
-				Updated: 13 July 2015 - updated -v option to show version and compiler used for build
+    Updated: 21 Mar 2015 -  [v0.5] increased the three letter word pool from
+							573 words to 1,312 words. and fixed the errors identified by
+							the 'Go Report Card' here: http://goreportcard.com/report/wiremoons/passgen
+    Updated: 20 Jun 2015 - typo fixes kindly reported by GitHub User @RickCogley.
+	Updated: 11 Jul 2015 - [v0.6] changed default output to show multiple suggestions
+							(ie with & without spaces & mixed case) plus as a
+							consequence made '-r' only relevant to '-q' option
+	Updated: 12 Jul 2015 - typo fixed in help text thanks to GitHub User @morgrowe
+	Updated: 13 Jul 2015 - updated -v option to show version and compiler used for build
+	Updated: 27 Aug 2016 - added randowm number to output, change password output format - removing '|'
+							changed version to 0.7. Compile with Go 1.7
 
-       TODO - maybe check for newer version and update if needed?
-       TODO - add -c mixed case output mode
+   TODO - maybe check for newer version and update if needed?
+   TODO - move large passmap to seperate file to keep code and data seperate
+   TODO - review help text output and handle a different way?
 
 */
 
@@ -43,7 +46,7 @@ import (
 // GLOBAL VARIABLES
 //
 // set the version of the app here
-var appversion = "0.6"
+var appversion = "0.7"
 var appname string
 
 // below used by flag for command line args
@@ -366,7 +369,7 @@ func main() {
 	if version {
 		// print app name called and version information
 		fmt.Printf("\n Running %s version %s\n", appname, appversion)
-		fmt.Printf(" Built with Go Complier '%s' on Golang version '%s'\n",runtime.Compiler, runtime.Version())
+		fmt.Printf(" Built with Go Complier '%s' on Golang version '%s'\n", runtime.Compiler, runtime.Version())
 		fmt.Printf(" - Author's web site: http://www.wiremoons.com/\n")
 		fmt.Printf(" - Source code for %s: https://github.com/wiremoons/passgen/\n", appname)
 		fmt.Printf("\nAll is well\n")
@@ -409,7 +412,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	// default output is to include mixed case passwords as well
+	// default output is to include mixed case passwords and provide a random number as well
 	passcase = true
 	// OK - so run as normal and display output
 	fmt.Printf("\n\t\t\tTHREE WORD - PASSWORD GENERATOR\n\t\t\t¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n")
@@ -429,7 +432,7 @@ func main() {
 		// get a mixed case password
 		mixedcasepass := getMixPassword(nospacepass)
 		//fmt.Printf("\t%s\n", getPassword(numwords))
-		fmt.Printf("\t| %s |   | %s |   | %s |\n", defaultpass, nospacepass, mixedcasepass)
+		fmt.Printf("\t%s    %s    %s    %d\n", defaultpass, nospacepass, mixedcasepass, rand.Intn(100))
 	}
 	// END OF MAIN()
 	fmt.Printf("\nTo change the password suggestion output shown above, use the command line options.\n")
