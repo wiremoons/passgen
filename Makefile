@@ -3,11 +3,12 @@
 #
 # CHANGE THE TWO LINES BELOW TO MATCH YOUR 'SOURCE CODE FILE NAME' AND YOUR
 # REQUIRED 'OUTPUT FILENAME' FOR YOUR GO PROJECT
-SRC=passgen.go
+SRC=passgen.go passmap.go printHelp.go
 OUTNAME=passgen
 # Go compiler settings
 CC=go
 CFLAGS=build
+RFLAGS=run
 #
 # To build for Linux 32bit
 LIN32=GOOS=linux GOARCH=amd64
@@ -47,6 +48,9 @@ mac64: $(SRC)
 
 bsd64: $(SRC)
 	$(BSD64) $(CC) $(CFLAGS) -o $(OUTNAME)-freebsd64 $(SRC)
+
+run: $(SRC)
+	$(CC) $(RFLAGS) $(SRC)
 
 clean:
 	rm $(OUTNAME).exe $(OUTNAME)-x64.exe $(OUTNAME)-x386.exe $(OUTNAME) $(OUTNAME)-x386 $(OUTNAME)-macx64 $(OUTNAME)-mac386 $(OUTNAME)-linx64 $(OUTNAME)-freebsd64
