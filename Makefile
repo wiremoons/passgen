@@ -1,7 +1,8 @@
 #
 #	Makefile for Go Language code
 #
-# --- CHANGE THESE FOR YOU SOURCE FILE NAME & OUPUT FILENAME (ie minus .go suffix)
+# CHANGE THE TWO LINES BELOW TO MATCH YOUR 'SOURCE CODE FILE NAME' AND YOUR
+# REQUIRED 'OUTPUT FILENAME' FOR YOUR GO PROJECT
 SRC=passgen.go
 OUTNAME=passgen
 # Go compiler settings
