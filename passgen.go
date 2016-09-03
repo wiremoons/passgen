@@ -21,6 +21,7 @@
 	Updated: 13 Jul 2015 - updated -v option to show version and compiler used for build
 	Updated: 27 Aug 2016 - added randowm number to output, change password output format - removing '|'
 							changed version to 0.7. Compile with Go 1.7
+	Updated: 03 Sep 2016 - changed from BSD license to MIT license as more 								permissive and popular.
 
    TODO - maybe check for newer version and update if needed?
    TODO - move large passmap to seperate file to keep code and data seperate
