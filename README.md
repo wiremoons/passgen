@@ -26,53 +26,39 @@ punctuation characters too if you wish&mdash;but it would be wiser to
 keep the password simple, and easy to remember, but change it more
 frequently instead, using a fresh newly generated one every few weeks.
 
-### Updates and News
+The application outputs mixed case passwords also. The switching of certain password letters to upper case is also done randomly, so as to enhance the overall entropy of the resultant password. 
 
-**Updated: 11 July 2015** v0.5 update includes the addition of mix case output.
-
-**Updated: 20 June 2015** typo fixes kindly reported by GitHub user @RickCogley.
-
-**Update 21 March 2015:** the larger pool of three letter words used in
-  the c language version (instead of Go) available here:
-  [sugpass](https://github.com/wiremoons/sugpass) has now been added to this
-  application also.
-
-**Update 22 Jan 2015:** there is a newer version of this program with
-  a larger pool of three letter words. The application is written in
-  the c language (instead of Go) and is available here:
-  [sugpass](https://github.com/wiremoons/sugpass)
-
-For more information see the related blog posts here:
-
-- [2014-12-09-Three-Letter-Word-Passwords](http://www.wiremoons.com/posts/2014-12-09-Three-Letter-Word-Passwords)
-- [2015-01-22-Easy-Passwords-Everywhere](http://www.wiremoons.com/posts/2015-01-22-Easy-Passwords-Everywhere)
+Additionally with each password suggested, a randomly generated number is provided, which can be include it in the password you select from the outputs, should you wish.
 
 ### Application Usage
 
 The program is run from a command prompt&mdash;so on Windows using
-Powershell or the Command Prompt, and on Linux or MacOSX in a Terminal
-window using a shell such as bash. When the progam is run without any
-command line arguments, it displays the following output:
+Powershell or cmd.exe, and on Linux or MacOSX in a Terminal
+window using a shell such as bash. 
+
+When the progam is run without any command line arguments, it displays the following output:
 
 ```
 
-                  THREE WORD - PASSWORD GENERATOR
-                  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+                        THREE WORD - PASSWORD GENERATOR
+                        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 • Number of three letter words available in the pool is: 1312
 • Number of three letter words to include in the suggested password is: 3
         • Password character length will therefore be: 9
 • Mixed case passwords to be provided: true
 • Offering 3 suggested passwords for your consideration:
 
-        | kos ads ods |   | kosadsods |   | KOsADSoDs |
-        | elf gal nas |   | elfgalnas |   | elfgaLNAs |
-        | lye meh bee |   | lyemehbee |   | lYeMehBeE |
+        off due lar    offduelar    OFfdUelAr    50
+        lep poa fid    leppoafid    lEpPoAfid    19
+        mos box sei    mosboxsei    moSbOXSEi    15
 
 To change the password suggestion output shown above, use the command line options.
 Run the program as follows for more help:  passgen.exe -h
 
 All is well
 ```
+Using the command line parameters, you can also use `passgen` in the following ways:
+
 If you need to generate a 12 character password randomly created from three
 letter words&mdash;perhaps as part of a command line pipe, you could use this
 following options:
@@ -98,7 +84,6 @@ weeNothONdeWpiAEaUDodSEgKiSUDSmiSpsTSisRoceHsReClODPIgUSEPEWfesmOcjiGnOtoUR
 oPsmAareXDoGMAmaiSTidJEthotgNutHYMoNMoEmOIBAlauawiTorcsUbnubDOTTIgVETbOSbOP
 SALcoxLumEcuaFToOFuLEkIfYOBohsAbaGUSfuNgOOHonZaSSAZWAEtoCfeWREDCABPosvAVaah
 ```
-
 
 The full list of command line arguments available are shown below, and also when you run: `passgen -help`:
 ```
@@ -150,9 +135,14 @@ make all
 
 ## To Do
 
-The following enhancements are planned - see the source code also for any other *TODO* suggestions:
+The following enhancements are planned in the future:
 
 - TODO - maybe check for newer version and update if needed?
+- TODO - add support for tags and better versioning
+- TODO - maybe check for newer version and update if needed?
+- TODO - move large passmap to separate file to keep code and data separate
+- TODO - review help text output and handle a different way?
+
 
 ## License
 
