@@ -1,4 +1,4 @@
-[![NewBSD License](http://img.shields.io/badge/license-NewBSD-orange.svg?style=flat-square)](http://opensource.org/licenses/BSD-3-Clause)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 
 ## THREE WORD - PASSWORD GENERATOR
 #### (Go language version)
@@ -156,12 +156,14 @@ The following enhancements are planned - see the source code also for any other 
 
 ## License
 
-The program is licensed under the "New BSD License" or "BSD 3-Clause
-License". A copy of the license is available
+This program is licensed under the "MIT License". See
+http://opensource.org/licenses/mit for more details.
+
+A copy of the license is available
 [here](https://github.com/wiremoons/passgen/blob/master/LICENSE).
 
 ## OTHER INFORMATION
 
 - Latest version is kept on GitHub here: [Wiremoons GitHub Pages](https://github.com/wiremoons)
 - The program is written in Go - more information here: [Go](http://www.golang.org/)
-- The program was written by Simon Rowe, licensed under [New BSD License](http://opensource.org/licenses/BSD-3-Clause)
+- The program was written by Simon Rowe, and is licensed under [The MIT License (MIT)](http://opensource.org/licenses/mit)
