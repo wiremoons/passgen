@@ -37,3 +37,11 @@ binaries/passgen-linx64
 binaries/passgen-macx64
 binaries/passgen-x386.exe
 binaries/passgen-x64.exe
+
+# ignore cscope and ctags databases
+cscope.out
+tags
+
+# exclude Vim temp files
+*.swp
+*.swo
