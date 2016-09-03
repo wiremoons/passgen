@@ -1,7 +1,6 @@
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 
 ## THREE WORD - PASSWORD GENERATOR
-#### (Go language version)
 
 ## Application Summary
 
@@ -36,7 +35,7 @@ The program is run from a command prompt&mdash;so on Windows using
 Powershell or cmd.exe, and on Linux or MacOSX in a Terminal
 window using a shell such as bash. 
 
-When the progam is run without any command line arguments, it displays the following output:
+When the program is run without any command line arguments, it displays the following output:
 
 ```
 
@@ -100,7 +99,7 @@ The command line options are explained in more detail below:
 - **-c** : 'c' stands for 'case'. Used to get mixed case passwords. **Note:** useful with `-q` only
 - **-h** : 'h' stands for 'help'. if run with the `-h` option a screen of help text will be displayed
 - **-s** : 's' stands for 'suggestion'. By default three passwords will be suggested. Change by adding a different number, so `-s 5` would provide five passwords.
-- **-w** : 'w' stands for 'word'. By default the suggested passwords consist of three x three letter words, so 9 characters in length. If you wanted a longer password length, you can chnage the number of words&mdash;so using `-w 4` would provide four words instead, giving a password length of 12 characters.
+- **-w** : 'w' stands for 'word'. By default the suggested passwords consist of three x three letter words, so 9 characters in length. If you wanted a longer password length, you can change the number of words&mdash;so using `-w 4` would provide four words instead, giving a password length of 12 characters.
 - **-q** : 'q' stands for 'quiet'. This option only outputs ONE password (optionally at the length specified with -w) and no other text, so useful for using with command line pipes. Use with option `-r` to also remove spaces in the password and the `-c` options to obtain a mixed case password suggestion.
 - **-r** : 'r' stands for 'remove'. This options removes any spaces from the password suggestions that are output **Note:** useful with `-q` only
 - **-v** : 'v' stands for 'version'. This options only outputs the version of the application
@@ -109,26 +108,32 @@ The command line options are explained in more detail below:
 
 Pre-compiled binaries are available from the Release page below. These are provide for Windows (32bit and 64bit), MacOSX (64bit), and Linux (64bit):
 
-- [passgen Release 0.5](https://github.com/wiremoons/passgen/releases/tag/0.5)
-- [passgen Release 0.4](https://github.com/wiremoons/passgen/releases/tag/0.4)
+- [passgen Release 0.7.0](https://github.com/wiremoons/passgen/releases/tag/0.7.0)
+- [passgen Pre-Release 0.5](https://github.com/wiremoons/passgen/releases/tag/0.5)
+- [passgen Pre-Release 0.4](https://github.com/wiremoons/passgen/releases/tag/0.4)
 
 
 ### Compiling the Program
 
 Assuming you already have Go installed and set-up on your computer—you
-only need to download the single source file '`passgen.go`'. This can
-then be built using the command below, assuming the `passgen.go` file
-is in you current directory:
+can download and install with the go command:
 
 ```
-go build ./passgen.go
+go get -u -v github.com/wiremoons/passgen
 ```
 
 There is also a `Makefile` that I use on a computer running Linux to
 cross compile the program for Linux (64 bit version), Windows (32 bit
 and 64 bit versions), FreeBSD (64 bit version), and Mac OS X (64 bit version).
-This can be done (assuming you have your computer and Go set-up correctly) by also
-downloading the 'Makefile', and then entering:
+
+This can be done (assuming you have `make` installed your computer, and Go set-up correctly) by downloading the source zip file or Git cloning the `passgen` repo with the command:
+
+```
+git clone https://github.com/wiremoons/passgen/
+```
+
+After you have a copy of the source code, you can use the 'Makefile'. Read the Makefile for the options - but to get a copy of all the binary version run:
+
 ```
 make all
 ```
@@ -138,10 +143,7 @@ make all
 The following enhancements are planned in the future:
 
 - TODO - maybe check for newer version and update if needed?
-- TODO - add support for tags and better versioning
-- TODO - maybe check for newer version and update if needed?
-- TODO - move large passmap to separate file to keep code and data separate
-- TODO - review help text output and handle a different way?
+- TODO - add support for tags and better versioning info on compile
 
 
 ## License
