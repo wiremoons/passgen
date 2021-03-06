@@ -25,7 +25,7 @@ import (
 // GLOBAL VARIABLES
 
 // set the version of the app here
-var appversion = "0.7.0"
+var appversion = "0.7.1"
 var appname string
 
 // below used by flag to store command line arguments given by the user
@@ -42,13 +42,13 @@ var version bool
 func init() {
 	// IntVar; StringVar; BoolVar options for flag
 	// format required: variable, cmd line flag, initial value, description.
-	flag.BoolVar(&passcase, "c", false, "\tUSE: '-c=true' to get mixed case passwords. Note: useful with -q only [DEFAULT: lowercase]")
-	flag.BoolVar(&helpMe, "h", false, "\tUSE: '-h' to provide more detailed help about this program")
+	flag.BoolVar(&passcase, "c", false, "\tUSE: '-c=true' provide mixed case passwords. Note: useful with -q only [DEFAULT: lowercase]")
+	flag.BoolVar(&helpMe, "h", false, "\tUSE: '-h' display more detailed help about this program")
 	flag.BoolVar(&quiet, "q", false, "\tUSE: '-q=true' to obtain just ONE password - no other screen output [DEFAULT: additional info output]")
-	flag.BoolVar(&remove, "r", false, "\tUSE: '-r=true' to remove spaces. Note: useful with -q only [DEFAULT: with spaces]")
-	flag.IntVar(&numsuggestions, "s", 3, "\tUSE: '-s no.' where no. is the number of password suggestions offered [DEFAULT: 3]")
+	flag.BoolVar(&remove, "r", false, "\tUSE: '-r=true' remove password spaces. Note: useful with -q only [DEFAULT: with spaces]")
+	flag.IntVar(&numsuggestions, "s", 3, "\tUSE: '-s #' where # is the number of password suggestions offered [DEFAULT: 3]")
 	flag.BoolVar(&version, "v", false, "\tUSE: '-v=true.' display the application version [DEFAULT: false]")
-	flag.IntVar(&numwords, "w", 3, "\tUSE: '-w no.' where no. is the number of three letter words to use [DEFAULT: 3]")
+	flag.IntVar(&numwords, "w", 3, "\tUSE: '-w #' where # is the number of three letter words to use [DEFAULT: 3]")
 	appname = filepath.Base(os.Args[0])
 }
 
@@ -122,11 +122,11 @@ func main() {
 	passcase = true
 	// OK - so run as normal and display output
 	fmt.Printf("\n\t\t\tTHREE WORD - PASSWORD GENERATOR\n\t\t\t¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n")
-	fmt.Printf("• Number of three letter words available in the pool is: %d\n", (len(passmap)))
-	fmt.Printf("• Number of three letter words to include in the suggested password is: %d\n", numwords)
-	fmt.Printf("\t• Password character length will therefore be: %d\n", (numwords * 3))
-	fmt.Printf("• Mixed case passwords to be provided: %s\n", strconv.FormatBool(passcase))
-	fmt.Printf("• Offering %d suggested passwords for your consideration:\n\n", numsuggestions)
+	fmt.Printf("» Number of three letter words available in the pool is: %d\n", (len(passmap)))
+	fmt.Printf("» Number of three letter words to include in the suggested password is: %d\n", numwords)
+	fmt.Printf("\t» Password character length will therefore be: %d\n", (numwords * 3))
+	fmt.Printf("» Mixed case passwords to be provided: %s\n", strconv.FormatBool(passcase))
+	fmt.Printf("» Offering %d suggested passwords for your consideration:\n\n", numsuggestions)
 
 	// get password suggestion(s) based on number requested (numsuggestions),
 	// and include specified number  of three letter words requested (numword)
