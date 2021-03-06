@@ -37,6 +37,9 @@ binaries/passgen-linx64
 binaries/passgen-macx64
 binaries/passgen-x386.exe
 binaries/passgen-x64.exe
+# Compiled versions from 'go build'
+passgen
+passgen.exe
 
 # ignore cscope and ctags databases
 cscope.out
