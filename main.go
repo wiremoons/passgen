@@ -1,4 +1,3 @@
-//
 //	passgen - an application to provide password suggestions based on
 //	a collection of three letter English words.
 //
@@ -6,7 +5,6 @@
 // All rights reserved.
 // Use of this source code is governed by a MIT license that can
 // be found in the LICENSE file.
-//
 package main
 
 import (
@@ -20,6 +18,8 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	pg "github.com/wiremoons/passgen/lib"
 )
 
 // GLOBAL VARIABLES
@@ -59,7 +59,7 @@ func main() {
 	// was the command line flag '-h' used?
 	if helpMe {
 		// call function to display information about the application
-		printHelp()
+		pg.PrintHelp()
 		// call to display the standard command line usage info
 		flag.Usage()
 		// let user know we ran as expected
@@ -122,7 +122,7 @@ func main() {
 	passcase = true
 	// OK - so run as normal and display output
 	fmt.Printf("\n\t\t\tTHREE WORD - PASSWORD GENERATOR\n\t\t\t¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n")
-	fmt.Printf("» Number of three letter words available in the pool is: %d\n", (len(passmap)))
+	fmt.Printf("» Number of three letter words available in the pool is: %d\n", (len(pg.Passmap)))
 	fmt.Printf("» Number of three letter words to include in the suggested password is: %d\n", numwords)
 	fmt.Printf("\t» Password character length will therefore be: %d\n", (numwords * 3))
 	fmt.Printf("» Mixed case passwords to be provided: %s\n", strconv.FormatBool(passcase))
@@ -155,7 +155,7 @@ func getPassword(numwords int) string {
 	var passSuggestion string
 	// get three letter word associated with random number:
 	for ; numwords > 0; numwords-- {
-		passSuggestion = passSuggestion + " " + (passmap[rand.Intn(len(passmap))])
+		passSuggestion = passSuggestion + " " + (pg.Passmap[rand.Intn(len(pg.Passmap))])
 	}
 	// remove leading space from password string
 	passSuggestion = strings.TrimLeft(passSuggestion, " ")
