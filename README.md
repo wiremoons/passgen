@@ -112,6 +112,9 @@ Pre-compiled binaries are available from the Release page below. These are provi
 - [passgen Pre-Release 0.5](https://github.com/wiremoons/passgen/releases/tag/0.5)
 - [passgen Pre-Release 0.4](https://github.com/wiremoons/passgen/releases/tag/0.4)
 
+Final compiled binary versions for Linux, Windows, macOS and FreeBSD are available in the `binaries/` sub folder
+of this GitHub repo. The functionality is the same as the *0.7.0* release. Future versions of the application will 
+have an adjusted appearance - so please one of these binaries if you dislike the newer version.
 
 ### Compiling the Program
 
@@ -122,9 +125,9 @@ can download and install with the go command:
 go get -u -v github.com/wiremoons/passgen
 ```
 
-There is also a `Makefile` that I use on a computer running Linux to
-cross compile the program for Linux (64 bit version), Windows (32 bit
-and 64 bit versions), FreeBSD (64 bit version), and Mac OS X (64 bit version).
+There is also a `Makefile` that I use to cross compile the program for Linux (32 and 64 bit versions for Intel 
+and ARM/Raspberry Pi), Windows (32 bit and 64 bit versions for Intel and 64 bit ARM), FreeBSD (64 bit version), 
+and macOS (64 bit versions for Intel and Apple Silicon arm64).
 
 This can be done (assuming you have `make` installed your computer, and Go set-up correctly) by downloading the source zip file or Git cloning the `passgen` repo with the command:
 
@@ -138,12 +141,15 @@ After you have a copy of the source code, you can use the 'Makefile'. Read the M
 make all
 ```
 
+You can also run the command: `make help` for further assistance.
+
 ## To Do
 
 The following enhancements are planned in the future:
 
 - TODO - maybe check for newer version and update if needed?
 - TODO - add support for tags and better versioning info on compile
+- TODO - update the interface with colour output options etc.
 
 
 ## License
